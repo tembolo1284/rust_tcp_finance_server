@@ -17,6 +17,7 @@ pub fn format_price(ticker: &str, price: f64) -> String {
 }
 
 /// Stores and manages price data for tickers.
+#[derive(Default)]
 pub struct PriceTracker {
     data: HashMap<String, Vec<f64>>,
 }
