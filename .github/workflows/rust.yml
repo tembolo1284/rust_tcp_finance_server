@@ -13,11 +13,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install yq
+      run: |
+        sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+        sudo chmod a+x /usr/local/bin/yq
+
     - name: Read Docker configuration
       id: docker_config
-      uses: ehealthafrica/actions-read-yaml@v1
-      with:
-        path: "./.github/workflows/docker_config.yml"  # Updated path
+      run: |
+        echo "DOCKER_USERNAME=$(yq eval '.docker_hub.username' .github/workflows/docker_config.yml)" >> $GITHUB_ENV
+        echo "DOCKER_TOKEN=$(yq eval '.docker_hub.access_token' .github/workflows/docker_config.yml)" >> $GITHUB_ENV
     
     - name: Install Rust
       uses: actions-rs/toolchain@v1
@@ -37,10 +42,10 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
-        username: ${{ fromJson(steps.docker_config.outputs.data).docker_hub.username }}
-        password: ${{ fromJson(steps.docker_config.outputs.data).docker_hub.access_token }}
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ env.DOCKER_TOKEN }}
       
     - name: Tag and push Docker image
       run: |
-        docker tag rust-tcp-finance-server ${{ fromJson(steps.docker_config.outputs.data).docker_hub.username }}/rust-tcp-finance-server:latest
-        docker push ${{ fromJson(steps.docker_config.outputs.data).docker_hub.username }}/rust-tcp-finance-server:latest
+        docker tag rust-tcp-finance-server ${{ env.DOCKER_USERNAME }}/rust-tcp-finance-server:latest
+        docker push ${{ env.DOCKER_USERNAME }}/rust-tcp-finance-server:latest
