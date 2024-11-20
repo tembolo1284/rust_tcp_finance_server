@@ -55,7 +55,6 @@ RustTCPFinanceServer/
 └── .github/
 
     └── workflows/
-
         └── rust.yml        # GitHub Actions CI/CD configuration
 \```
 
