@@ -111,7 +111,23 @@ docker build -t rust-tcp-finance-server .
 ```
 docker run -p 9000:9000 rust-tcp-finance-server
 ```
+3. Can also run a detached container so it runs in the background:
 
+```
+docker run -d -p 9000:9000 rust-tcp-finance-server
+
+```
+
+Useful docker commands to see what the server is doing, and to stop it.
+
+```
+docker ps
+
+docker logs <container-id>
+
+docker stop <container-id>
+
+```
 ## Testing
 
 Run the test suite:
