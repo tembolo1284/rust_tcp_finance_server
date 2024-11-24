@@ -35,12 +35,17 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
+        logout: true  # Ensure we logout after the job
+
+    # Add a verification step
+    - name: Verify Docker login
+      run: docker info
+        
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
         context: .
         push: true
-        tags: |
-          tembolo1284/rust-tcp-finance-server:latest
-          tembolo1284/rust-tcp-finance-server:${{ github.sha }}
+        tags: ${{ env.DOCKER_IMAGE_NAME }}:latest,${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+        cache-from: type=registry,ref=${{ env.DOCKER_IMAGE_NAME }}:buildcache
+        cache-to: type=registry,ref=${{ env.DOCKER_IMAGE_NAME }}:buildcache,mode=max
