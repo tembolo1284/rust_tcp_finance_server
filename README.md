@@ -149,6 +149,52 @@ The server configuration is stored in `config/config.toml`:
 host = "0.0.0.0"
 port = 9000
 ```
+# Steps to start both server and client through docker commands:
+
+## 1. First stop any running containers
+docker stop $(docker ps -a -q)
+
+### See all containers with details
+docker ps -a
+
+### See just the container IDs
+docker ps -a -q
+
+### Stop specific containers manually (equivalent to what the combined command does)
+docker stop <container-id1> <container-id2> <container-id3>
+
+## 2. Remove any existing containers with same names (to avoid conflicts)
+docker rm finance-server 2>/dev/null || true
+
+## 3. Verify the finance-net network exists
+docker network ls | grep finance-net
+
+## If it doesn't exist, create it:
+## docker network create finance-net
+
+## 4. Start the server container
+docker run -d --name finance-server --network finance-net -p 9000:9000 rust-tcp-finance-server server
+
+
+## 5. Verify server is running
+docker ps | grep finance-server
+
+## 6. Get the server's IP address
+docker inspect finance-server | grep IPAddress
+
+## 7. Run the client container
+docker run --network finance-net rust-tcp-finance-server client
+
+if the above doesn't work one can also try:
+
+## 8. Start client interactively (in another terminal)
+docker run -it --network host rust-tcp-finance-server client
+
+# To see logs of finance-server:
+
+```
+docker logs finance-server
+```
 
 ## Author
 
