@@ -7,13 +7,13 @@ on:
     branches: [ main ]
 
 env:
-  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/rust-tcp-finance-server
+  DOCKER_IMAGE_NAME: tembolo1284/rust-tcp-finance-server
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3  # Updated to v3
+    - uses: actions/checkout@v3
     
     - name: Install Rust
       uses: actions-rs/toolchain@v1
@@ -41,4 +41,6 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ env.DOCKER_IMAGE_NAME }}:latest
+        tags: |
+          ${{ env.DOCKER_IMAGE_NAME }}:latest
+          ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
