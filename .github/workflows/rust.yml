@@ -42,5 +42,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ env.DOCKER_IMAGE_NAME }}:latest
-          ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+          tembolo1284/rust-tcp-finance-server:latest
+          tembolo1284/rust-tcp-finance-server:${{ github.sha }}
