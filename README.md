@@ -109,19 +109,19 @@ docker build -t rust-tcp-finance-server .
 
 2. Run the container (server):
 ```
-docker run -p 9000:9000 rust-tcp-finance server
+docker run -p 9000:9000 rust-tcp-finance-server server
 ```
 3. Can also run a detached container so it runs in the background (server):
 
 ```
-docker run -d -p 9000:9000 rust-tcp-finance server
+docker run -d -p 9000:9000 rust-tcp-finance-server server
 
 ```
 
 4. Run the client:
 
 ```
-docker run rust-tcp-finance client
+docker run rust-tcp-finance-server client
 ```
 
 Useful docker commands to see what the server is doing, and to stop it.
